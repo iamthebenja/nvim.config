@@ -82,7 +82,7 @@ return {
 		require("fidget").setup({})
 		require("mason").setup()
 		require("mason-lspconfig").setup({
-			-- ensure_installed = vim.tbl_keys(servers),
+			ensure_installed = vim.tbl_keys(servers),
 			handlers = {
 				function(server_name) -- default handler (optional)
 					require("lspconfig")[server_name].setup({
