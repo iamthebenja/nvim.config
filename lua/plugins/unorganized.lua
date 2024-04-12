@@ -23,6 +23,19 @@ return {
 				ruby = { "standardrb" },
 			}
 
+			local eslint = lint.linters.eslint_d
+
+			eslint.args = {
+				"--no-warn-ignored", -- <-- this is the key argument
+				"--format",
+				"json",
+				"--stdin",
+				"--stdin-filename",
+				function()
+					return vim.api.nvim_buf_get_name(0)
+				end,
+			}
+
 			local lint_augroup = vim.api.nvim_create_augroup("lint", { clear = true })
 
 			vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost", "InsertLeave" }, {
@@ -47,11 +60,11 @@ return {
 			conform.setup({
 				formatters_by_ft = {
 					lua = { "stylua" },
-					svelte = { { "prettierd", "prettier" } },
-					javascript = { { "prettierd", "prettier" } },
-					typescript = { { "prettierd", "prettier" } },
-					javascriptreact = { { "prettierd", "prettier" } },
-					typescriptreact = { { "prettierd", "prettier" } },
+					svelte = { { "eslint_d", "eslint" } },
+					javascript = { { "eslint_d", "eslint" } },
+					typescript = { { "eslint_d", "eslint" } },
+					javascriptreact = { { "eslint_d", "eslint" } },
+					typescriptreact = { { "eslint_d", "eslint" } },
 					json = { { "prettierd", "prettier" } },
 					graphql = { { "prettierd", "prettier" } },
 					java = { "google-java-format" },
