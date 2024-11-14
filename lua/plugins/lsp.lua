@@ -60,7 +60,43 @@ return {
 			},
 			pyright = {},
 			rust_analyzer = {},
-			tsserver = {},
+			-- tsserver = {},
+			vtsls = {
+				filetypes = {
+					"javascript",
+					"javascriptreact",
+					"javascript.jsx",
+					"typescript",
+					"typescriptreact",
+					"typescript.tsx",
+				},
+				settings = {
+					complete_function_calls = true,
+					vtsls = {
+						enableMoveToFileCodeAction = true,
+						autoUseWorkspaceTsdk = true,
+						experimental = {
+							completion = {
+								enableServerSideFuzzyMatch = true,
+							},
+						},
+					},
+					typescript = {
+						updateImportsOnFileMove = { enabled = "always" },
+						suggest = {
+							completeFunctionCalls = true,
+						},
+						inlayHints = {
+							enumMemberValues = { enabled = true },
+							functionLikeReturnTypes = { enabled = true },
+							parameterNames = { enabled = "literals" },
+							parameterTypes = { enabled = true },
+							propertyDeclarationTypes = { enabled = true },
+							variableTypes = { enabled = false },
+						},
+					},
+				},
+			},
 			html = { filetypes = { "html", "twig", "hbs" } },
 
 			lua_ls = {
@@ -107,6 +143,12 @@ return {
 					})
 				end,
 			},
+		})
+
+		vim.api.nvim_create_autocmd("BufWritePre", {
+			pattern = { "*.tsx", "*.ts", "*.jsx", "*.js" },
+			command = "silent! EslintFixAll",
+			group = vim.api.nvim_create_augroup("MyAutocmdsJavaScripFormatting", {}),
 		})
 
 		local cmp_select = { behavior = cmp.SelectBehavior.Select }

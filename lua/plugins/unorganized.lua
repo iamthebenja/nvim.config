@@ -1,4 +1,57 @@
 return {
+	{ -- Useful plugin to show you pending keybinds.
+		"folke/which-key.nvim",
+		event = "VimEnter", -- Sets the loading event to 'VimEnter'
+		opts = {
+			icons = {
+				-- set icon mappings to true if you have a Nerd Font
+				mappings = vim.g.have_nerd_font,
+				-- If you are using a Nerd Font: set icons.keys to an empty table which will use the
+				-- default whick-key.nvim defined Nerd Font icons, otherwise define a string table
+				keys = vim.g.have_nerd_font and {} or {
+					Up = "<Up> ",
+					Down = "<Down> ",
+					Left = "<Left> ",
+					Right = "<Right> ",
+					C = "<C-…> ",
+					M = "<M-…> ",
+					D = "<D-…> ",
+					S = "<S-…> ",
+					CR = "<CR> ",
+					Esc = "<Esc> ",
+					ScrollWheelDown = "<ScrollWheelDown> ",
+					ScrollWheelUp = "<ScrollWheelUp> ",
+					NL = "<NL> ",
+					BS = "<BS> ",
+					Space = "<Space> ",
+					Tab = "<Tab> ",
+					F1 = "<F1>",
+					F2 = "<F2>",
+					F3 = "<F3>",
+					F4 = "<F4>",
+					F5 = "<F5>",
+					F6 = "<F6>",
+					F7 = "<F7>",
+					F8 = "<F8>",
+					F9 = "<F9>",
+					F10 = "<F10>",
+					F11 = "<F11>",
+					F12 = "<F12>",
+				},
+			},
+
+			-- Document existing key chains
+			spec = {
+				{ "<leader>c", group = "[C]ode", mode = { "n", "x" } },
+				{ "<leader>d", group = "[D]ocument" },
+				{ "<leader>r", group = "[R]ename" },
+				{ "<leader>s", group = "[S]earch" },
+				{ "<leader>w", group = "[W]orkspace" },
+				{ "<leader>t", group = "[T]oggle" },
+				{ "<leader>h", group = "Git [H]unk", mode = { "n", "v" } },
+			},
+		},
+	},
 	"tpope/vim-fugitive",
 	"tpope/vim-rhubarb",
 	"tpope/vim-sleuth",
@@ -13,27 +66,14 @@ return {
 			local lint = require("lint")
 
 			lint.linters_by_ft = {
-				javascript = { "eslint_d" },
-				typescript = { "eslint_d" },
-				javascriptreact = { "eslint_d" },
-				typescriptreact = { "eslint_d" },
+				-- javascript = { "eslint_d" },
+				-- typescript = { "eslint_d" },
+				-- javascriptreact = { "eslint_d" },
+				-- typescriptreact = { "eslint_d" },
 				svelte = { "eslint_d" },
 				kotlin = { "ktlint" },
 				terraform = { "tflint" },
 				ruby = { "standardrb" },
-			}
-
-			local eslint = lint.linters.eslint_d
-
-			eslint.args = {
-				"--no-warn-ignored", -- <-- this is the key argument
-				"--format",
-				"json",
-				"--stdin",
-				"--stdin-filename",
-				function()
-					return vim.api.nvim_buf_get_name(0)
-				end,
 			}
 
 			local lint_augroup = vim.api.nvim_create_augroup("lint", { clear = true })
@@ -60,11 +100,11 @@ return {
 			conform.setup({
 				formatters_by_ft = {
 					lua = { "stylua" },
-					svelte = { { "eslint_d", "eslint" } },
-					javascript = { { "eslint_d", "eslint" } },
-					typescript = { { "eslint_d", "eslint" } },
-					javascriptreact = { { "eslint_d", "eslint" } },
-					typescriptreact = { { "eslint_d", "eslint" } },
+					svelte = { { "prettierd", "prettier" } },
+					javascript = { { "prettierd", "prettier" } },
+					typescript = { { "prettierd", "prettier" } },
+					javascriptreact = { { "prettierd", "prettier" } },
+					typescriptreact = { { "prettierd", "prettier" } },
 					json = { { "prettierd", "prettier" } },
 					graphql = { { "prettierd", "prettier" } },
 					java = { "google-java-format" },
@@ -83,6 +123,7 @@ return {
 				},
 				format_on_save = {
 					lsp_fallback = true,
+					timeout_ms = 3000,
 				},
 			})
 
@@ -90,7 +131,7 @@ return {
 				conform.format({
 					lsp_fallback = true,
 					async = false,
-					timeout_ms = 500,
+					timeout_ms = 3000,
 				})
 			end, { desc = "Format file or range (in visual mode)" })
 		end,
